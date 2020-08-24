@@ -30,6 +30,10 @@ a = piece("example",200,20,0,(255,0,0))
 pieces.append(a)
 b = piece('li',100,100,0,(5,200,0))
 pieces.append(b)
+
+
+#TODO: Definir una altra que sigui una T per exemple
+
 #b.rotRight()
 
 #Bucle Principal del Joc(Aixo va tot el rato i d'aqui se surt a fer cusas)

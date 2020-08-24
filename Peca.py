@@ -16,7 +16,7 @@ block_border_side = 16
 
 
 
-#Block class
+#Block class(En principi no la has de tocar)
 class block():
     
     #Inicialitzacio, se li passa posició inicial i un colorsito reshulon
@@ -110,11 +110,12 @@ class piece():
         ang = (self.angle * np.pi) / 180. 
         
         #Tres tipos de peçes, dos son veritat i un es perque facis el tonto
+        #TODO: Afegir un if per la teva nova peça
         if self.type == 'example':
             #Un sol block centrat al centre i de color color
             self.blocks.append(block(center_x,center_y,self.color))
             
-        if self.type =='sq':
+        elif self.type =='sq':
             #Als quadrats no els hi importa una merda si els rotes per tant tot va bé fins aqui
             #Pots aagafar com a centre (0,0) i fer els calculs per veure quin block es quin
             #Declaracio block:: block(posX,posY,color)
@@ -123,7 +124,7 @@ class piece():
             self.blocks.append(block(center_x-block_side,center_y,self.color))
             self.blocks.append(block(center_x,center_y,self.color))
             
-        if self.type == 'li':
+        elif self.type == 'li':
             #Comença la festa
             
             #Suposo que en realitat ho has fet ja pero si vols fer que una 
