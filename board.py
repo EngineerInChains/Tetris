@@ -5,7 +5,7 @@ Created on Mon Aug 24 15:45:16 2020
 @author: Miki
 """
 
-
+import random
 import pygame
 from Peca import *
 class board():
@@ -22,14 +22,24 @@ class board():
         self.pieces = []
         self.score = 0
         self.active_p = -1
+       
         
     def create_piece(self):
-        
-        typ = 'li'
+           
+     
+        typ = random.choice(["sq",'li','T','S','Z','L','J'])
         posX = 200
         posY = 200
         angle = 0
-        color = (255,0,0)
+        color = random.choice(
+            [(200, 0, 200),
+            (0, 0, 200),
+            (0, 200, 200),
+            (0, 200, 0),
+            (200,200,0),
+            (200, 0, 0)])
+        
+        
         self.pieces.append(piece(typ,posX,posY,angle,color,self.lim_z,self.lim_x_min,self.lim_x_max))
         self.active_p = self.active_p + 1
     def rotate_active(self):
@@ -39,8 +49,12 @@ class board():
         r = True
         if dir==0:
             r = self.pieces[self.active_p].moveLeft(20)
-        else:
+        elif dir==1:
             r =self.pieces[self.active_p].moveRight(20)
+        elif dir==2:
+            r =self.pieces[self.active_p].moveDown(20)
+        elif dir==3:
+            r=self.pieces[self.active_p].moveDown(40)
         return r
         
     def update_board(self):

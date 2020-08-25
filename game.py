@@ -3,6 +3,7 @@
 Created on Sun Aug 23 21:27:37 2020
 
 @author: Miki
+@shadow :P : Kaviga
 """
 
 
@@ -11,6 +12,7 @@ import pygame
 from pygame.locals import *
 import board
 import time
+import random
 
 #Funcio que em demanen que posi(la llibreria)
 pygame.init()
@@ -24,9 +26,8 @@ b = board.board(WIDTH,HEIGHT,'Tetris')
 
 b.create_piece()
 
-#TODO: Definir una altra que sigui una T per exemple
 
-#b.rotRight()
+#b.rotRight()zz
 
 #Bucle Principal del Joc(Aixo va tot el rato i d'aqui se surt a fer cusas)
 while True:
@@ -39,8 +40,12 @@ while True:
                 b.move_active(0)
             elif event.key == K_RIGHT:
                 b.move_active(1)
+            elif event.key == K_DOWN:
+                b.move_active(2)
+            elif event.key== K_SPACE:
+                b.move_active(3)
             if event.key == K_r:
-                b.rotate_active()
+                b.rotate_active() 
         if event.type == QUIT:
             pygame.quit()
             exit()

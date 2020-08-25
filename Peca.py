@@ -21,6 +21,7 @@ class block():
     
     #Inicialitzacio, se li passa posició inicial i un colorsito reshulon
     def __init__(self,posX,posY,color):
+
         
         #Assignacions varies
         self.posX = posX
@@ -175,9 +176,132 @@ class piece:
             p_y = (center_y-block_side/2)*abs(np.cos(ang))+(center_y+block_side)*abs(np.sin(ang))
             new_b = block(p_x,p_y,self.color)
             self.blocks.append(new_b)
-       
+            
+            
+        elif self.type == 'T':
+            
+            if self.angle>= 0 and self.angle < 90 :
+                
+                self.blocks.append(block(center_x-block_side/2,center_y-block_side/2,self.color))
+                self.blocks.append(block(center_x-block_side*1.5,center_y-block_side/2,self.color))
+                self.blocks.append(block(center_x+block_side/2,center_y-block_side/2,self.color))
+                self.blocks.append(block(center_x-block_side/2,center_y-block_side*1.5,self.color))
+                
+            elif self.angle>=90 and self.angle<180:
+                
+                self.blocks.append(block(center_x-block_side/2,center_y-block_side/2,self.color))
+                self.blocks.append(block(center_x+0.5*block_side,center_y-block_side/2,self.color))
+                self.blocks.append(block(center_x-block_side/2,center_y-block_side*1.5,self.color))
+                self.blocks.append(block(center_x-block_side/2,center_y+block_side/2,self.color))
+            
+            elif self.angle>=180 and self.angle<270:
+                
+                self.blocks.append(block(center_x-block_side/2,center_y-block_side/2,self.color))
+                self.blocks.append(block(center_x-block_side*1.5,center_y-block_side/2,self.color))
+                self.blocks.append(block(center_x-block_side/2,center_y+block_side/2,self.color))
+                self.blocks.append(block(center_x+block_side/2,center_y-block_side/2,self.color))
+                
+            else:    
+                
+                self.blocks.append(block(center_x-block_side/2,center_y-block_side/2,self.color))
+                self.blocks.append(block(center_x-1.5*block_side,center_y-block_side/2,self.color))
+                self.blocks.append(block(center_x-block_side/2,center_y-block_side*1.5,self.color))
+                self.blocks.append(block(center_x-block_side/2,center_y+block_side/2,self.color))
+            
+        
+        elif self.type == 'J':
+            
+            if self.angle>= 0 and self.angle < 90 :
+                
+                self.blocks.append(block(center_x-block_side/2,center_y-block_side/2,self.color))
+                self.blocks.append(block(center_x-block_side*1.5,center_y-block_side/2,self.color))
+                self.blocks.append(block(center_x+block_side/2,center_y-block_side/2,self.color))
+                self.blocks.append(block(center_x+block_side/2,center_y+block_side/2,self.color))
+                
+            elif self.angle>=90 and self.angle<180 : 
+                
+                self.blocks.append(block(center_x-block_side/2,center_y-block_side/2,self.color))
+                self.blocks.append(block(center_x-block_side/2,center_y-block_side*1.5,self.color))
+                self.blocks.append(block(center_x-block_side/2,center_y+block_side/2,self.color))
+                self.blocks.append(block(center_x-1.5*block_side,center_y+block_side/2,self.color))
+                
+            
+            elif self.angle>=180 and self.angle<270 :   
+                
+                self.blocks.append(block(center_x-block_side/2,center_y-block_side/2,self.color))
+                self.blocks.append(block(center_x-block_side*1.5,center_y-block_side/2,self.color))
+                self.blocks.append(block(center_x+block_side/2,center_y-block_side/2,self.color))
+                self.blocks.append(block(center_x-1.5*block_side,center_y-block_side*1.5,self.color))
+            
+            else :     
+                
+                self.blocks.append(block(center_x-block_side/2,center_y-block_side/2,self.color))
+                self.blocks.append(block(center_x-block_side/2,center_y-block_side*1.5,self.color))
+                self.blocks.append(block(center_x-block_side/2,center_y+block_side/2,self.color))
+                self.blocks.append(block(center_x+block_side*0.5,center_y-block_side*1.5,self.color))
+                
+        elif self.type == 'L':
+            
+            if self.angle>= 0 and self.angle < 90 :
+                
+                self.blocks.append(block(center_x-block_side/2,center_y-block_side/2,self.color))
+                self.blocks.append(block(center_x-block_side*1.5,center_y-block_side/2,self.color))
+                self.blocks.append(block(center_x+block_side/2,center_y-block_side/2,self.color))
+                self.blocks.append(block(center_x-block_side*1.5,center_y+block_side/2,self.color))
+            
+            elif self.angle>=90 and self.angle<180 : 
+                
+                self.blocks.append(block(center_x-block_side/2,center_y-block_side/2,self.color))
+                self.blocks.append(block(center_x-block_side/2,center_y-block_side*1.5,self.color))
+                self.blocks.append(block(center_x-block_side/2,center_y+block_side/2,self.color))
+                self.blocks.append(block(center_x-1.5*block_side,center_y-block_side*1.5,self.color))
+            
+            elif self.angle>=180 and self.angle<270 :   
+                
+                self.blocks.append(block(center_x-block_side/2,center_y-block_side/2,self.color))
+                self.blocks.append(block(center_x-block_side*1.5,center_y-block_side/2,self.color))
+                self.blocks.append(block(center_x+block_side/2,center_y-block_side/2,self.color))
+                self.blocks.append(block(center_x+0.5*block_side,center_y-block_side*1.5,self.color))
+                
+            else :     
+                
+                self.blocks.append(block(center_x-block_side/2,center_y-block_side/2,self.color))
+                self.blocks.append(block(center_x-block_side/2,center_y-block_side*1.5,self.color))
+                self.blocks.append(block(center_x-block_side/2,center_y+block_side/2,self.color))
+                self.blocks.append(block(center_x+block_side*0.5,center_y+block_side*0.5,self.color)) 
+                
+                
+                
+        elif self.type == 'S':
+            
+            if self.angle>=0 and self.angle<90 or self.angle>=180 and self.angle<270:
+                self.blocks.append(block(center_x-block_side/2,center_y-block_side/2,self.color))
+                self.blocks.append(block(center_x+block_side/2,center_y-block_side/2,self.color))
+                self.blocks.append(block(center_x-block_side/2,center_y+block_side/2,self.color))
+                self.blocks.append(block(center_x-block_side*1.5,center_y+block_side/2,self.color))
+            else:
+                self.blocks.append(block(center_x-block_side/2,center_y-block_side/2,self.color))
+                self.blocks.append(block(center_x+block_side/2,center_y-block_side/2,self.color))
+                self.blocks.append(block(center_x-block_side/2,center_y-block_side*1.5,self.color))
+                self.blocks.append(block(center_x+block_side/2,center_y+block_side*0.5,self.color))
+        
+        elif self.type == 'Z':
+            
+            if self.angle>=0 and self.angle<90 or self.angle>=180 and self.angle<270:
+                self.blocks.append(block(center_x-block_side/2,center_y-block_side/2,self.color))
+                self.blocks.append(block(center_x+block_side/2,center_y+block_side/2,self.color))
+                self.blocks.append(block(center_x-block_side/2,center_y+block_side/2,self.color))
+                self.blocks.append(block(center_x-block_side*1.5,center_y-block_side/2,self.color))
+            else:
+                self.blocks.append(block(center_x-block_side/2,center_y-block_side/2,self.color))
+                self.blocks.append(block(center_x-block_side/2,center_y+block_side/2,self.color))
+                self.blocks.append(block(center_x+block_side/2,center_y-block_side/2,self.color))
+                self.blocks.append(block(center_x+block_side/2,center_y-block_side*1.5,self.color))
+                
+                
         return not self.is_bottom()
     
+   
     
     def is_side(self,side):
         i = 0
