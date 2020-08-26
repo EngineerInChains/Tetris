@@ -10,6 +10,8 @@ import pygame
 from Peca import *
 class board():
     def __init__(self,sizeX,sizeY,caption):
+        
+        
         self.sizeX = sizeX
         self.sizeY = sizeY
         #Creacio superficie on es pinta (anchura i altura) 
@@ -17,19 +19,29 @@ class board():
         #Titol de la pantalla
         pygame.display.set_caption(caption)
         self.lim_z = sizeY-20
-        self.lim_x_min = 0+20
-        self.lim_x_max = sizeX-20*9
+        #self.lim_x_min = 0+20
+        #self.lim_x_max = sizeX-20*9
+        self.lim_x_min = {'li':0+20,'sq':0+20,'J':0+20,'L':0+20,'S':0+20,'Z':0+20,'T':0+20}
+        self.lim_x_max = {'li':sizeX-20*9,'sq':sizeX-20*9,'J':sizeX-20*9,'L':sizeX-20*9,'S':sizeX-20*9,'Z':sizeX-20*9,'T':sizeX-20*9}
         self.pieces = []
         self.score = 0
         self.active_p = -1
+        self.stopped = {}
        
         
     def create_piece(self):
            
      
-        typ = random.choice(["sq",'li','T','S','Z','L','J'])
-        posX = 200
-        posY = 200
+        typ = random.choice(["sq",'li','T','S','Z','L','J'])     
+        #typ='li'
+        
+        if typ == 'sq' or typ == 'li' :
+            posX = 200
+            posY = 200
+        else :
+            posX = 210
+            posY=190
+        
         angle = 0
         color = random.choice(
             [(200, 0, 200),
@@ -40,8 +52,9 @@ class board():
             (200, 0, 0)])
         
         
-        self.pieces.append(piece(typ,posX,posY,angle,color,self.lim_z,self.lim_x_min,self.lim_x_max))
+        self.pieces.append(piece(typ,posX,posY,angle,color,self.lim_z,self.lim_x_min[typ],self.lim_x_max[typ]))
         self.active_p = self.active_p + 1
+        
     def rotate_active(self):
         self.pieces[self.active_p].rotRight()
     
@@ -62,9 +75,17 @@ class board():
         
             #Si no ha arribat avall
             if not self.pieces[self.active_p].is_stop():
-                r = self.pieces[self.active_p].moveDown(10)
+                r = self.pieces[self.active_p].moveDown(20)
             else:
                 self.create_piece()
+                
+                
+    def into_board(self)      :   
+        
+        if self.pieces[self.active_p].is_stop():
+            
+                
+            
                 
                 
                 
