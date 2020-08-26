@@ -62,7 +62,7 @@ class piece:
         #Res interessant son tot assignacions
         self.color =color
         self.type = typ
-        self.blocks = []
+        self.blocks = np.zeros((4,2))
         self.rot_center_X = rotX
         self.rot_center_Y = rotY
         self.angle = initangle
@@ -99,120 +99,212 @@ class piece:
         
         if self.type == 'example':
             #Un sol block centrat al centre i de color color
-            self.blocks.append(block(center_x,center_y,self.color))
+            self.blocks[0,0] = center_x-block_side/2
+            self.blocks[0,1] = center_y-block_side/2
+            
             
         elif self.type =='sq':
             #Als quadrats no els hi importa una merda si els rotes per tant tot va bé fins aqui
             #Pots aagafar com a centre (0,0) i fer els calculs per veure quin block es quin
             #Declaracio block:: block(posX,posY,color)
-            self.blocks.append(block(center_x-block_side,center_y,self.color))
-            self.blocks.append(block(center_x,center_y,self.color))
-            self.blocks.append(block(center_x,center_y-block_side,self.color))
-            self.blocks.append(block(center_x-block_side,center_y-block_side,self.color))
+            self.blocks[0,0] = center_x-block_side
+            self.blocks[0,1] = center_y
+            
+            self.blocks[1,0] = center_x
+            self.blocks[1,1] = center_y
+            
+            self.blocks[2,0] = center_x
+            self.blocks[2,1] = center_y-block_side
+            
+            self.blocks[3,0] = center_x-block_side
+            self.blocks[3,1] = center_y-block_side
         
             
         elif self.type == 'li':
            
             if self.angle>= 0 and self.angle < 90 :
                 
-                self.blocks.append(block(center_x-block_side*2,center_y-block_side,self.color))
-                self.blocks.append(block(center_x-block_side*1,center_y-block_side,self.color))
-                self.blocks.append(block(center_x,center_y-block_side,self.color))
-                self.blocks.append(block(center_x+block_side,center_y-block_side,self.color))
+                self.blocks[0,0] = center_x-block_side*2
+                self.blocks[0,1] = center_y-block_side
+                
+                self.blocks[1,0] = center_x-block_side
+                self.blocks[1,1] = center_y-block_side
+                
+                self.blocks[2,0] = center_x
+                self.blocks[2,1] = center_y-block_side
+                
+                self.blocks[3,0] = center_x+block_side
+                self.blocks[3,1] = center_y-block_side
                     
             elif self.angle>=90 and self.angle<180:
                 
-                self.blocks.append(block(center_x-block_side,center_y-block_side*2,self.color))
-                self.blocks.append(block(center_x-block_side,center_y-block_side,self.color))
-                self.blocks.append(block(center_x-block_side,center_y,self.color))
-                self.blocks.append(block(center_x-block_side,center_y+block_side,self.color))
+                self.blocks[0,0] = center_x-block_side
+                self.blocks[0,1] = center_y-block_side*2
+                
+                self.blocks[1,0] = center_x-block_side
+                self.blocks[1,1] = center_y-block_side
+                
+                self.blocks[2,0] = center_x-block_side
+                self.blocks[2,1] = center_y
+                
+                self.blocks[3,0] = center_x-block_side
+                self.blocks[3,1] = center_y+block_side
                 
             elif self.angle>=180 and self.angle<270:
                 
-                self.blocks.append(block(center_x-block_side*2,center_y,self.color))
-                self.blocks.append(block(center_x-block_side*1,center_y,self.color))
-                self.blocks.append(block(center_x,center_y,self.color))
-                self.blocks.append(block(center_x+block_side,center_y,self.color))
+                self.blocks[0,0] = center_x-block_side*2
+                self.blocks[0,1] = center_y
+                
+                self.blocks[1,0] = center_x-block_side
+                self.blocks[1,1] = center_y
+                
+                self.blocks[2,0] = center_x
+                self.blocks[2,1] = center_y
+                
+                self.blocks[3,0] = center_x+block_side
+                self.blocks[3,1] = center_y
                   
             else:    
+                self.blocks[0,0] = center_x
+                self.blocks[0,1] = center_y-block_side*2
                 
-                self.blocks.append(block(center_x,center_y-block_side*2,self.color))
-                self.blocks.append(block(center_x,center_y-block_side,self.color))
-                self.blocks.append(block(center_x,center_y,self.color))
-                self.blocks.append(block(center_x,center_y+block_side,self.color))
-             
+                self.blocks[1,0] = center_x
+                self.blocks[1,1] = center_y-block_side
+                
+                self.blocks[2,0] = center_x
+                self.blocks[2,1] = center_y
+                
+                self.blocks[3,0] = center_x
+                self.blocks[3,1] = center_y+block_side
             
         elif self.type == 'T':
             
             if self.angle>= 0 and self.angle < 90 :
+                self.blocks[0,0] = center_x-block_side/2
+                self.blocks[0,1] = center_y-block_side/2
                 
-                self.blocks.append(block(center_x-block_side/2,center_y-block_side/2,self.color))
-                self.blocks.append(block(center_x-block_side*1.5,center_y-block_side/2,self.color))
-                self.blocks.append(block(center_x+block_side/2,center_y-block_side/2,self.color))
-                self.blocks.append(block(center_x-block_side/2,center_y-block_side*1.5,self.color))
+                self.blocks[1,0] = center_x-block_side*1.5
+                self.blocks[1,1] = center_y-block_side/2
+                
+                self.blocks[2,0] = center_x+block_side/2
+                self.blocks[2,1] = center_y-block_side/2
+                
+                self.blocks[3,0] = center_x-block_side/2
+                self.blocks[3,1] = center_y-block_side*1.5
+                
                 
             elif self.angle>=90 and self.angle<180:
+                self.blocks[0,0] = center_x-block_side/2
+                self.blocks[0,1] = center_y-block_side/2
                 
-                self.blocks.append(block(center_x-block_side/2,center_y-block_side/2,self.color))
-                self.blocks.append(block(center_x+0.5*block_side,center_y-block_side/2,self.color))
-                self.blocks.append(block(center_x-block_side/2,center_y-block_side*1.5,self.color))
-                self.blocks.append(block(center_x-block_side/2,center_y+block_side/2,self.color))
+                self.blocks[1,0] = center_x+block_side/2
+                self.blocks[1,1] = center_y-block_side/2
+                
+                self.blocks[2,0] = center_x-block_side/2
+                self.blocks[2,1] = center_y-block_side*1.5
+                
+                self.blocks[3,0] = center_x-block_side/2
+                self.blocks[3,1] = center_y+block_side/2
                 
             elif self.angle>=180 and self.angle<270:
                 
-                self.blocks.append(block(center_x-block_side/2,center_y-block_side/2,self.color))
-                self.blocks.append(block(center_x-block_side*1.5,center_y-block_side/2,self.color))
-                self.blocks.append(block(center_x-block_side/2,center_y+block_side/2,self.color))
-                self.blocks.append(block(center_x+block_side/2,center_y-block_side/2,self.color))
+                self.blocks[0,0] = center_x-block_side/2
+                self.blocks[0,1] = center_y-block_side/2
+                
+                self.blocks[1,0] = center_x-block_side*1.5
+                self.blocks[1,1] = center_y-block_side/2
+                
+                self.blocks[2,0] = center_x-block_side/2
+                self.blocks[2,1] = center_y+block_side/2
+                
+                self.blocks[3,0] = center_x+block_side/2
+                self.blocks[3,1] = center_y-block_side/2
                 
             else:    
                 
-                self.blocks.append(block(center_x-block_side/2,center_y-block_side/2,self.color))
-                self.blocks.append(block(center_x-1.5*block_side,center_y-block_side/2,self.color))
-                self.blocks.append(block(center_x-block_side/2,center_y-block_side*1.5,self.color))
-                self.blocks.append(block(center_x-block_side/2,center_y+block_side/2,self.color))
+                self.blocks[0,0] = center_x-block_side/2
+                self.blocks[0,1] = center_y-block_side/2
+                
+                self.blocks[1,0] = center_x-block_side*1.5
+                self.blocks[1,1] = center_y-block_side/2
+                
+                self.blocks[2,0] = center_x-block_side/2
+                self.blocks[2,1] = center_y-block_side*1.5
+                
+                self.blocks[3,0] = center_x-block_side/2
+                self.blocks[3,1] = center_y+block_side/2
                
             
         elif self.type == 'J':
             
             if self.angle>= 0 and self.angle < 90 :
+                self.blocks[0,0] = center_x-block_side/2
+                self.blocks[0,1] = center_y-block_side/2
                 
-                self.blocks.append(block(center_x-block_side/2,center_y-block_side/2,self.color))
-                self.blocks.append(block(center_x-block_side*1.5,center_y-block_side/2,self.color))
-                self.blocks.append(block(center_x+block_side/2,center_y-block_side/2,self.color))
-                self.blocks.append(block(center_x+block_side/2,center_y+block_side/2,self.color))
+                self.blocks[1,0] = center_x-block_side*1.5
+                self.blocks[1,1] = center_y-block_side/2
+                
+                self.blocks[2,0] = center_x+block_side/2
+                self.blocks[2,1] = center_y-block_side/2
+                
+                self.blocks[3,0] = center_x+block_side/2
+                self.blocks[3,1] = center_y+block_side/2
                 
             elif self.angle>=90 and self.angle<180 : 
                 
-                self.blocks.append(block(center_x-block_side/2,center_y-block_side/2,self.color))
-                self.blocks.append(block(center_x-block_side/2,center_y-block_side*1.5,self.color))
-                self.blocks.append(block(center_x-block_side/2,center_y+block_side/2,self.color))
-                self.blocks.append(block(center_x-1.5*block_side,center_y+block_side/2,self.color))
+                self.blocks[0,0] = center_x-block_side/2
+                self.blocks[0,1] = center_y-block_side/2
+                
+                self.blocks[1,0] = center_x-block_side/2
+                self.blocks[1,1] = center_y-block_side*1.5
+                
+                self.blocks[2,0] = center_x-block_side/2
+                self.blocks[2,1] = center_y+block_side/2
+                
+                self.blocks[3,0] = center_x-block_side*1.5
+                self.blocks[3,1] = center_y+block_side/2
                 
             elif self.angle>=180 and self.angle<270 :   
+                self.blocks[0,0] = center_x-block_side/2
+                self.blocks[0,1] = center_y-block_side/2
                 
-                self.blocks.append(block(center_x-block_side/2,center_y-block_side/2,self.color))
-                self.blocks.append(block(center_x-block_side*1.5,center_y-block_side/2,self.color))
-                self.blocks.append(block(center_x+block_side/2,center_y-block_side/2,self.color))
-                self.blocks.append(block(center_x-1.5*block_side,center_y-block_side*1.5,self.color))
+                self.blocks[1,0] = center_x-block_side*1.5
+                self.blocks[1,1] = center_y-block_side/2
+                
+                self.blocks[2,0] = center_x+block_side/2
+                self.blocks[2,1] = center_y-block_side/2
+                
+                self.blocks[3,0] = center_x-block_side*1.5
+                self.blocks[3,1] = center_y-block_side*1.5
                 
             else :     
+                self.blocks[0,0] = center_x-block_side/2
+                self.blocks[0,1] = center_y-block_side/2
                 
-                self.blocks.append(block(center_x-block_side/2,center_y-block_side/2,self.color))
-                self.blocks.append(block(center_x-block_side/2,center_y-block_side*1.5,self.color))
-                self.blocks.append(block(center_x-block_side/2,center_y+block_side/2,self.color))
-                self.blocks.append(block(center_x+block_side*0.5,center_y-block_side*1.5,self.color))
-               
+                self.blocks[1,0] = center_x-block_side/2
+                self.blocks[1,1] = center_y-block_side*1.5
+                
+                self.blocks[2,0] = center_x-block_side/2
+                self.blocks[2,1] = center_y+block_side/2
+                
+                self.blocks[3,0] = center_x+block_side/2
+                self.blocks[3,1] = center_y-block_side*1.5               
                 
                 
         elif self.type == 'L':
             
             if self.angle>= 0 and self.angle < 90 :
+                self.blocks[0,0] = center_x-block_side/2
+                self.blocks[0,1] = center_y-block_side/2
                 
-                self.blocks.append(block(center_x-block_side/2,center_y-block_side/2,self.color))
-                self.blocks.append(block(center_x-block_side*1.5,center_y-block_side/2,self.color))
-                self.blocks.append(block(center_x+block_side/2,center_y-block_side/2,self.color))
-                self.blocks.append(block(center_x-block_side*1.5,center_y+block_side/2,self.color))
+                self.blocks[1,0] = center_x-block_side*1.5
+                self.blocks[1,1] = center_y-block_side/2
+                
+                self.blocks[2,0] = center_x+block_side/2
+                self.blocks[2,1] = center_y-block_side/2
+                
+                self.blocks[3,0] = center_x-block_side*1.5
+                self.blocks[3,1] = center_y+block_side/2
                 
             elif self.angle>=90 and self.angle<180 : 
                 
@@ -278,14 +370,14 @@ class piece:
             while is_ok and i < len(self.blocks):
                 b = self.blocks[i]
                 
-                if b.posX <= self.lim_x_min:
+                if b[0] <= self.lim_x_min:
                     is_ok = False
                 i = i+1
         else:
             while is_ok and i < len(self.blocks):
                 b = self.blocks[i]
                 
-                if b.posX > self.lim_x_max:
+                if b[0] > self.lim_x_max:
                     is_ok = False
                 i = i+1
         return not is_ok
@@ -400,7 +492,13 @@ class piece:
     #Cosa mes simple no hi ha, crida al draw dels blocks
     def draw(self,surf):
         for b in self.blocks:
-            b.draw(surf)
+            x = b.x
+            y = b.y
+            r1 = pygame.Rect(x,y,block_side,block_side)
+            r2 = pygame.Rect(x,y,block_border_side,block_border_side)
+            pygame.draw.rect(surf,self.color,r1)
+            #Borde Negre de tamany 2
+            pygame.draw.rect(surf,(0,0,0),r2)
     
             
             
