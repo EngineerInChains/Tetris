@@ -78,7 +78,7 @@ class piece:
     #   -El centre de rotacio en Y
     #   -L'angle inicial
     #   -Colorsito(RGB)
-    def __init__(self,typ,rotX,rotY,initangle,color,limit_z,lim_x_min,lim_x_max,pos1,pos2,pos3,pos4):
+    def __init__(self,typ,rotX,rotY,initangle,color,limit_z,lim_x_min,lim_x_max):
         
         #Res interessant son tot assignacions
         self.color =color
@@ -94,14 +94,7 @@ class piece:
         self.stop = False
         self.update_sprite()
         
-        #defineixo posicions de cada block centrals, desde el centre de rotació per a cada quadrant...
-        #Les defineixo desquerra a dreta primer, després damunt a abaix.
         
-        self.pos1=pos1
-        self.pos2=pos2
-        self.pos3=pos3
-        self.pos4=pos4
-    
     #Forçar el centre de rotació de la peça on tu vulguis(moure la peça vamos)   
     def set_center(self,c_x,c_y):
         #En X
@@ -124,8 +117,7 @@ class piece:
         #Neteja llista de blocks(es molt millorable ja que es podrien reutilitzar)
         self.blocks = []
         
-        #Passo l'angle a radiants perque la merda numpy va aixi
-        ang = (self.angle * np.pi) / 180. 
+       
         
         
         if self.type == 'example':
@@ -140,29 +132,17 @@ class piece:
             self.blocks.append(block(center_x,center_y,self.color))
             self.blocks.append(block(center_x,center_y-block_side,self.color))
             self.blocks.append(block(center_x-block_side,center_y-block_side,self.color))
-            
-            self.pos1=(center_x-block_side/2,center_y-block_side/2)
-            self.pos2=(center_x+block_side/2,center_y-block_side/2)
-            self.pos3=(center_x-block_side/2,center_y+block_side/2)
-            self.pos4=(center_x+block_side/2,center_y+block_side/2)
+        
             
         elif self.type == 'li':
            
-            
             if self.angle>= 0 and self.angle < 90 :
                 
                 self.blocks.append(block(center_x-block_side*2,center_y-block_side,self.color))
                 self.blocks.append(block(center_x-block_side*1,center_y-block_side,self.color))
                 self.blocks.append(block(center_x,center_y-block_side,self.color))
                 self.blocks.append(block(center_x+block_side,center_y-block_side,self.color))
-                
-                self.pos1=(center_x-1.5*block_side,center_y-block_side/2)
-                self.pos2=(center_x*0.5,center_y-block_side/2)
-                self.pos3=(center_x+0.5*block_side,center_y-block_side/2)
-                self.pos4=(center_x+1.5*block_side,center_y-block_side/2)
-
-    
-                
+                    
             elif self.angle>=90 and self.angle<180:
                 
                 self.blocks.append(block(center_x-block_side,center_y-block_side*2,self.color))
@@ -170,37 +150,20 @@ class piece:
                 self.blocks.append(block(center_x-block_side,center_y,self.color))
                 self.blocks.append(block(center_x-block_side,center_y+block_side,self.color))
                 
-                self.pos1=(center_x-block_side/2,center_y-1.5*block_side)
-                self.pos2=(center_x-block_side/2,center_y-0.5*block_side)
-                self.pos3=(center_x-block_side/2,center_y+0.5*block_side)
-                self.pos4=(center_x-block_side/2,center_y+1.5*block_side)
-            
             elif self.angle>=180 and self.angle<270:
                 
                 self.blocks.append(block(center_x-block_side*2,center_y,self.color))
                 self.blocks.append(block(center_x-block_side*1,center_y,self.color))
                 self.blocks.append(block(center_x,center_y,self.color))
                 self.blocks.append(block(center_x+block_side,center_y,self.color))
-                
-                self.pos1=(center_x-1.5*block_side,center_y+block_side/2)
-                self.pos2=(center_x*0.5,center_y+block_side/2)
-                self.pos3=(center_x+0.5*block_side,center_y+block_side/2)
-                self.pos4=(center_x+1.5*block_side,center_y+block_side/2)
-                
+                  
             else:    
                 
                 self.blocks.append(block(center_x,center_y-block_side*2,self.color))
                 self.blocks.append(block(center_x,center_y-block_side,self.color))
                 self.blocks.append(block(center_x,center_y,self.color))
                 self.blocks.append(block(center_x,center_y+block_side,self.color))
-                
-                self.pos1=(center_x+block_side/2,center_y-1.5*block_side)
-                self.pos2=(center_x+block_side/2,center_y-0.5*block_side)
-                self.pos3=(center_x+block_side/2,center_y+0.5*block_side)
-                self.pos4=(center_x+block_side/2,center_y+1.5*block_side)
-            
-            
-            
+             
             
         elif self.type == 'T':
             
@@ -211,13 +174,6 @@ class piece:
                 self.blocks.append(block(center_x+block_side/2,center_y-block_side/2,self.color))
                 self.blocks.append(block(center_x-block_side/2,center_y-block_side*1.5,self.color))
                 
-                
-                self.pos1=(center_x-block_side,center_y)
-                self.pos2=(center_x,center_y)
-                self.pos3=(center_x,center_y-block_side)
-                self.pos4=(center_x+block_side,center_y)
-                
-                
             elif self.angle>=90 and self.angle<180:
                 
                 self.blocks.append(block(center_x-block_side/2,center_y-block_side/2,self.color))
@@ -225,11 +181,6 @@ class piece:
                 self.blocks.append(block(center_x-block_side/2,center_y-block_side*1.5,self.color))
                 self.blocks.append(block(center_x-block_side/2,center_y+block_side/2,self.color))
                 
-                self.pos1=(center_x,center_y+block_side)
-                self.pos2=(center_x-block_side,center_y)
-                self.pos3=(center_x,center_y)
-                self.pos4=(center_x,center_y+block_side)
-            
             elif self.angle>=180 and self.angle<270:
                 
                 self.blocks.append(block(center_x-block_side/2,center_y-block_side/2,self.color))
@@ -237,24 +188,14 @@ class piece:
                 self.blocks.append(block(center_x-block_side/2,center_y+block_side/2,self.color))
                 self.blocks.append(block(center_x+block_side/2,center_y-block_side/2,self.color))
                 
-                self.pos1=(center_x-block_side,center_y)
-                self.pos2=(center_x,center_y)
-                self.pos3=(center_x,center_y+block_side)
-                self.pos4=(center_x+block_side,center_y)
-                
             else:    
                 
                 self.blocks.append(block(center_x-block_side/2,center_y-block_side/2,self.color))
                 self.blocks.append(block(center_x-1.5*block_side,center_y-block_side/2,self.color))
                 self.blocks.append(block(center_x-block_side/2,center_y-block_side*1.5,self.color))
                 self.blocks.append(block(center_x-block_side/2,center_y+block_side/2,self.color))
-                
-                self.pos1=(center_x,center_y+block_side)
-                self.pos2=(center_x+block_side,center_y)
-                self.pos3=(center_x,center_y)
-                self.pos4=(center_x,center_y+block_side)
+               
             
-        
         elif self.type == 'J':
             
             if self.angle>= 0 and self.angle < 90 :
@@ -264,11 +205,6 @@ class piece:
                 self.blocks.append(block(center_x+block_side/2,center_y-block_side/2,self.color))
                 self.blocks.append(block(center_x+block_side/2,center_y+block_side/2,self.color))
                 
-                self.pos1=(center_x-block_side,center_y)
-                self.pos2=(center_x,center_y)
-                self.pos3=(center_x+block_side,center_y)
-                self.pos4=(center_x+block_side,center_y+block_side)
-                
             elif self.angle>=90 and self.angle<180 : 
                 
                 self.blocks.append(block(center_x-block_side/2,center_y-block_side/2,self.color))
@@ -276,12 +212,6 @@ class piece:
                 self.blocks.append(block(center_x-block_side/2,center_y+block_side/2,self.color))
                 self.blocks.append(block(center_x-1.5*block_side,center_y+block_side/2,self.color))
                 
-                self.pos1 = (center_x,center_y-block_side)
-                self.pos2= (center_x+block_side,center_y+block_side)
-                self.pos3= (center_x,center_y)
-                self.pos4 = (center_x,center_y-block_side)
-                
-            
             elif self.angle>=180 and self.angle<270 :   
                 
                 self.blocks.append(block(center_x-block_side/2,center_y-block_side/2,self.color))
@@ -289,22 +219,13 @@ class piece:
                 self.blocks.append(block(center_x+block_side/2,center_y-block_side/2,self.color))
                 self.blocks.append(block(center_x-1.5*block_side,center_y-block_side*1.5,self.color))
                 
-                self.pos1=(center_x-block_side,center_y)
-                self.pos2=(center_x,center_y)
-                self.pos3=(center_x+block_side,center_y)
-                self.pos4=(center_x-block_side,center_y+block_side)
-            
             else :     
                 
                 self.blocks.append(block(center_x-block_side/2,center_y-block_side/2,self.color))
                 self.blocks.append(block(center_x-block_side/2,center_y-block_side*1.5,self.color))
                 self.blocks.append(block(center_x-block_side/2,center_y+block_side/2,self.color))
                 self.blocks.append(block(center_x+block_side*0.5,center_y-block_side*1.5,self.color))
-                
-                self.pos1 = (center_x,center_y-block_side)
-                self.pos2= (center_x-block_side,center_y+block_side)
-                self.pos3= (center_x,center_y)
-                self.pos4 = (center_x,center_y-block_side)
+               
                 
                 
         elif self.type == 'L':
@@ -316,11 +237,6 @@ class piece:
                 self.blocks.append(block(center_x+block_side/2,center_y-block_side/2,self.color))
                 self.blocks.append(block(center_x-block_side*1.5,center_y+block_side/2,self.color))
                 
-                self.pos1=(center_x-block_side,center_y)
-                self.pos2=(center_x,center_y)
-                self.pos3=(center_x+block_side,center_y)
-                self.pos4=(center_x-block_side,center_y+block_side)
-            
             elif self.angle>=90 and self.angle<180 : 
                 
                 self.blocks.append(block(center_x-block_side/2,center_y-block_side/2,self.color))
@@ -328,25 +244,13 @@ class piece:
                 self.blocks.append(block(center_x-block_side/2,center_y+block_side/2,self.color))
                 self.blocks.append(block(center_x-1.5*block_side,center_y-block_side*1.5,self.color))
                 
-                 
-                self.pos1 = (center_x,center_y-block_side)
-                self.pos2= (center_x+block_side,center_y+block_side)
-                self.pos3= (center_x,center_y)
-                self.pos4 = (center_x,center_y-block_side)
-                
-            
             elif self.angle>=180 and self.angle<270 :   
                 
                 self.blocks.append(block(center_x-block_side/2,center_y-block_side/2,self.color))
                 self.blocks.append(block(center_x-block_side*1.5,center_y-block_side/2,self.color))
                 self.blocks.append(block(center_x+block_side/2,center_y-block_side/2,self.color))
                 self.blocks.append(block(center_x+0.5*block_side,center_y-block_side*1.5,self.color))
-                
-                self.pos1=(center_x-block_side,center_y)
-                self.pos2=(center_x,center_y)
-                self.pos3=(center_x+block_side,center_y)
-                self.pos4=(center_x+block_side,center_y-block_side)
-                
+                    
             else :     
                 
                 self.blocks.append(block(center_x-block_side/2,center_y-block_side/2,self.color))
@@ -354,44 +258,42 @@ class piece:
                 self.blocks.append(block(center_x-block_side/2,center_y+block_side/2,self.color))
                 self.blocks.append(block(center_x+block_side*0.5,center_y+block_side*0.5,self.color)) 
                 
-                self.pos1 = (center_x,center_y-block_side)
-                self.pos2= (center_x-block_side,center_y-block_side)
-                self.pos3= (center_x,center_y)
-                self.pos4 = (center_x,center_y-block_side)
-                
-                
                 
         elif self.type == 'S':
             
             if self.angle>=0 and self.angle<90 or self.angle>=180 and self.angle<270:
+                
                 self.blocks.append(block(center_x-block_side/2,center_y-block_side/2,self.color))
                 self.blocks.append(block(center_x+block_side/2,center_y-block_side/2,self.color))
                 self.blocks.append(block(center_x-block_side/2,center_y+block_side/2,self.color))
                 self.blocks.append(block(center_x-block_side*1.5,center_y+block_side/2,self.color))
+                
             else:
+                
                 self.blocks.append(block(center_x-block_side/2,center_y-block_side/2,self.color))
                 self.blocks.append(block(center_x+block_side/2,center_y-block_side/2,self.color))
                 self.blocks.append(block(center_x-block_side/2,center_y-block_side*1.5,self.color))
                 self.blocks.append(block(center_x+block_side/2,center_y+block_side*0.5,self.color))
         
+        
         elif self.type == 'Z':
             
             if self.angle>=0 and self.angle<90 or self.angle>=180 and self.angle<270:
+                
                 self.blocks.append(block(center_x-block_side/2,center_y-block_side/2,self.color))
                 self.blocks.append(block(center_x+block_side/2,center_y+block_side/2,self.color))
                 self.blocks.append(block(center_x-block_side/2,center_y+block_side/2,self.color))
                 self.blocks.append(block(center_x-block_side*1.5,center_y-block_side/2,self.color))
+                
             else:
+                
                 self.blocks.append(block(center_x-block_side/2,center_y-block_side/2,self.color))
                 self.blocks.append(block(center_x-block_side/2,center_y+block_side/2,self.color))
                 self.blocks.append(block(center_x+block_side/2,center_y-block_side/2,self.color))
                 self.blocks.append(block(center_x+block_side/2,center_y-block_side*1.5,self.color))
                 
                 
-        return not self.is_bottom()
-    
-   
-    
+         
     def is_side(self,side):
         i = 0
         is_ok = True
