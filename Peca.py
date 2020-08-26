@@ -22,52 +22,31 @@ class block():
     #Inicialitzacio, se li passa posició inicial i un colorsito reshulon
     def __init__(self,posX,posY,color):
 
-        
         #Assignacions varies
         self.posX = posX
         self.posY = posY
         self.color = color
         
-        
-        #Creació dels Dos Sprites que te la caca aquesta
-        
-        #El primer es el rectangle de fora(blanc)
-        r1 = pygame.Rect(posX,posY,block_side,block_side)
-        
-        #El segon es el de dins(el borde negre) que despres li direm que no 
-        # l'ompli, la posició esta rara perque quedi centrat el quadrat
-        r2 = pygame.Rect(posX,posY,block_border_side,block_border_side)
-        
-        #Assignem a la variable de la classe que guardarà aquestes coses(Sprites)
-        self.sprit = [r1,r2]
-        
     #Bastant selfexplanatory, se li dona un desplaçament i updatea les posicions i els sprites
     def moveRight(self,desp):
         self.posX = self.posX+desp
-        #Canviem el Sprite perque despres sa dibuixi on toca
-        self.sprit[0] = pygame.Rect(self.posX,self.posY,block_side, block_side)
-        self.sprit[1] = pygame.Rect(self.posX,self.posY,block_border_side,block_border_side)
+        
     def moveLeft(self,desp):
         self.posX = self.posX-desp
-        #Canviem el Sprite perque despres sa dibuixi on toca
-        self.sprit[0] = pygame.Rect(self.posX,self.posY,block_side, block_side)
-        self.sprit[1] = pygame.Rect(self.posX,self.posY,block_border_side,block_border_side)
-    def moveDown(self,desp):
         
+    def moveDown(self,desp):
         #Canviem la posicio del block
         self.posY = self.posY+desp
-        
-        #Canviem el Sprite perque despres sa dibuixi on toca
-        self.sprit[0] = pygame.Rect(self.posX,self.posY,block_side, block_side)
-        self.sprit[1] = pygame.Rect(self.posX,self.posY,block_border_side,block_border_side)
     
     #Dibuixa els dos rectangles (quadrats) dels que portem parlant una estona,
     #fa servir la funcio de pygame i necessita la superficie(matriu gran amb tot) per funcionar
     def draw(self,surf):
         #Rectangle Blanc
-        pygame.draw.rect(surf,self.color,self.sprit[0])
+        r1 = pygame.Rect(self.posX,self.posY,block_side,block_side)
+        r2 = pygame.Rect(self.posX,self.posY,block_border_side,block_border_side)
+        pygame.draw.rect(surf,self.color,r1)
         #Borde Negre de tamany 2
-        pygame.draw.rect(surf,(0,0,0),self.sprit[1],2)
+        pygame.draw.rect(surf,(0,0,0),r2)
         
         
 #Peça de Tetris!! :)
@@ -116,8 +95,6 @@ class piece:
         
         #Neteja llista de blocks(es molt millorable ja que es podrien reutilitzar)
         self.blocks = []
-        
-       
         
         
         if self.type == 'example':
@@ -412,7 +389,7 @@ class piece:
         while not stop and i < len(self.blocks):
             b = self.blocks[i]
             
-            if b.posY>=self.lim_z:
+            if (b.posY+block_side)>=self.lim_z:
                 stop = True
             else:
                 stop = False
