@@ -65,7 +65,10 @@ class board():
         elif side == 'd':
             r = self.pieces[self.active_p].moveDown(20)
         elif side=='dd':
+            #condicio per si queda menys de 40 espais
+          
             r=self.pieces[self.active_p].moveDown(40)
+            
         return r
     def get_score(self):
         return self.score
@@ -101,6 +104,7 @@ class board():
                 
     def draw_board(self):
         self.displaysurface.fill((0,0,0))
+        self.grid_draw()
         if not self.lost:
             size = 20
             pygame.draw.line(self.displaysurface,(150,150,150),(size/2-1,0),(size/2-1,self.sizeY-size),size+1)
@@ -130,4 +134,16 @@ class board():
             self.displaysurface.blit(img, (self.sizeX/2,self.sizeY/2))
         
         #Funcio que realment fa els canvis a la pantalla(com un enviar)
+             
+            
+    def grid_draw(self):
+        grid_color = (70, 70, 70)
+        for i in range(11):
+            x=block_side * i
+            pygame.draw.line(self.displaysurface,grid_color,(x,0),(x,600))
+        
+        for i in range(30):
+            y=block_side * i
+            pygame.draw.line(self.displaysurface,grid_color,(0,y),(360,y))
+            
         
