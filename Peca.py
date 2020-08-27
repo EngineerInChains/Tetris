@@ -154,27 +154,39 @@ class piece:
     
     def is_bottom(self):
         i = 0
-        j = 0
+        
         self.stop = False
         while not self.stop and i < len(self.blocks):
             b = self.blocks[i]
             if (b[1]+block_side)<self.lim_z:
-                
+                j = 0
                 while not self.stop and j < len(self.extra_blocks):
                     
                     s = self.extra_blocks[j]
                     
-                    if b[0]==s[0] and (b[1]+block_side)>=s[1]:
+                    if b[0]==s[0] and b[1]==s[1]:
                         self.stop = True
-                    else:
-                        self.stop = False
+                    
                     j = j+1
             else:
                 self.stop = True
             i = i+1
         return self.stop
             
+    def is_line(self,height,block_s):
+        lines = []
+        b = False
+        if len(self.extra_blocks)>0:
+            for line in range(0,height,block_s):
+                b1_line = self.blocks[self.blocks[:,1]==line]
+                b2_line = self.extra_blocks[self.extra_blocks[:,1]==line]
+                if len(b1_line)+len(b2_line)==10:
+                    b = True
+                    lines.append(line)
         
+        return lines,b     
+            
+                
     #Cosa mes simple no hi ha, crida al draw dels blocks
     def draw(self,surf):
         

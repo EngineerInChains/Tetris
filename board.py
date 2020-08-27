@@ -27,7 +27,7 @@ class board():
         self.score = 0
         self.active_p = -1
         self.stopped = {}
-        self.extra_blocks = []
+        self.extra_blocks = np.array([[-1,-1]])
        
         
     def create_piece(self):
@@ -76,10 +76,19 @@ class board():
             if not self.pieces[self.active_p].is_stop():
                 r = self.pieces[self.active_p].moveDown(20)
             else:
+                lines,b = self.pieces[self.active_p].is_line(self.sizeY,20)
+                
                 blocks = self.pieces[self.active_p].get_blocks()
-                for b in blocks:
-                    self.extra_blocks.append(b)
-                    print(b)
+                if b:
+                    for line in lines:
+                        blocks = blocks[blocks[:,1] != line]
+                        aux_blocks = blocks[:,1]<= line
+                        self.extra_blocks = self.extra_blocks[self.extra_blocks[:, 1] != line]
+                        aux_extra = self.extra_blocks[:,1]<= line
+                        blocks[aux_blocks,1]= blocks[aux_blocks,1]+20
+                        self.extra_blocks[aux_extra,1] = self.extra_blocks[aux_extra,1]+20
+                        
+                self.extra_blocks = np.vstack((self.extra_blocks,blocks))
                 self.create_piece()
                         
                 
@@ -96,8 +105,17 @@ class board():
         
         pygame.draw.rect(self.displaysurface,(0,0,0),pygame.Rect(self.sizeX-20-100,0+20,100,70))
         
-        for p in self.pieces:
-            p.draw(self.displaysurface)
+        for b in self.extra_blocks:
+            x = b[0]
+            y = b[1]
+            r1 = pygame.Rect(x,y,block_side,block_side)
+            r2 = pygame.Rect(x+2,y+2,block_border_side,block_border_side)
+            pygame.draw.rect(self.displaysurface,(200,200,200),r1)
+            #Borde Negre de tamany 2
+            pygame.draw.rect(self.displaysurface,(0,0,0),r2,3)
+        
+        self.pieces[self.active_p].draw(self.displaysurface)
+        
         
         #Funcio que realment fa els canvis a la pantalla(com un enviar)
         
