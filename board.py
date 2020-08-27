@@ -18,11 +18,11 @@ class board():
         self.displaysurface = pygame.display.set_mode((sizeX, sizeY))
         #Titol de la pantalla
         pygame.display.set_caption(caption)
-        self.lim_z = sizeY-20
+        self.lim_z = sizeY
         #self.lim_x_min = 0+20
         #self.lim_x_max = sizeX-20*9
-        self.lim_x_min = {'li':0+20,'sq':0+20,'J':0+20,'L':0+20,'S':0+20,'Z':0+20,'T':0+20}
-        self.lim_x_max = {'li':sizeX-20*9,'sq':sizeX-20*9,'J':sizeX-20*9,'L':sizeX-20*9,'S':sizeX-20*9,'Z':sizeX-20*9,'T':sizeX-20*9}
+        self.lim_x_min = 0
+        self.lim_x_max = sizeX-20*8
         self.pieces = []
         self.score = 0
         self.active_p = -1
@@ -33,7 +33,7 @@ class board():
            
      
         typ = random.choice(["sq",'li','T','S','Z','L','J'])     
-        #typ='li'
+        #typ='sq'
         
         if typ == 'sq' or typ == 'li' :
             posX = 200
@@ -52,21 +52,19 @@ class board():
             (200, 0, 0)])
         
         
-        self.pieces.append(piece(typ,posX,posY,angle,color,self.lim_z,self.lim_x_min[typ],self.lim_x_max[typ]))
+        self.pieces.append(piece(typ,posX,posY,angle,color,self.lim_z,self.lim_x_min,self.lim_x_max))
         self.active_p = self.active_p + 1
         
     def rotate_active(self):
-        self.pieces[self.active_p].rotRight()
+        self.pieces[self.active_p].rot()
     
-    def move_active(self,dir):
-        r = True
-        if dir==0:
-            r = self.pieces[self.active_p].moveLeft(20)
-        elif dir==1:
-            r =self.pieces[self.active_p].moveRight(20)
-        elif dir==2:
-            r =self.pieces[self.active_p].moveDown(20)
-        elif dir==3:
+    def move_active(self,side):
+        r = False
+        if side!='d' and side != 'dd':
+            r = self.pieces[self.active_p].moveside(side,20)
+        elif side == 'd':
+            r = self.pieces[self.active_p].moveDown(20)
+        elif side=='dd':
             r=self.pieces[self.active_p].moveDown(40)
         return r
         
@@ -80,11 +78,11 @@ class board():
                 self.create_piece()
                 
                 
-    def into_board(self)      :   
+    def into_board(self):   
         
         if self.pieces[self.active_p].is_stop():
             
-                
+                pass
             
                 
                 

@@ -14,6 +14,7 @@ import board
 import time
 import random
 
+
 #Funcio que em demanen que posi(la llibreria)
 pygame.init()
 
@@ -37,14 +38,14 @@ while True:
     for event in pygame.event.get():
         if event.type == KEYDOWN:
             if event.key == K_LEFT:
-                b.move_active(0)
+                b.move_active('l')
             elif event.key == K_RIGHT:
-                b.move_active(1)
+                b.move_active('r')
             elif event.key == K_DOWN:
-                b.move_active(2)
+                b.move_active('d')
             elif event.key== K_SPACE:
-                b.move_active(3)
-            if event.key == K_r:
+                b.move_active('dd')
+            elif event.key == K_r:
                 b.rotate_active() 
         if event.type == QUIT:
             pygame.quit()
