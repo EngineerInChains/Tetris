@@ -27,6 +27,7 @@ class board():
         self.score = 0
         self.active_p = -1
         self.stopped = {}
+        self.extra_blocks = []
        
         
     def create_piece(self):
@@ -36,10 +37,10 @@ class board():
         #typ='sq'
         
         if typ == 'sq' or typ == 'li' :
-            posX = 200
+            posX = 140
             posY = 200
         else :
-            posX = 210
+            posX = 150
             posY=190
         
         angle = 0
@@ -52,7 +53,7 @@ class board():
             (200, 0, 0)])
         
         
-        self.pieces.append(piece(typ,posX,posY,angle,color,self.lim_z,self.lim_x_min,self.lim_x_max))
+        self.pieces.append(piece(typ,posX,posY,angle,color,self.lim_z,self.lim_x_min,self.lim_x_max,self.extra_blocks))
         self.active_p = self.active_p + 1
         
     def rotate_active(self):
@@ -75,15 +76,12 @@ class board():
             if not self.pieces[self.active_p].is_stop():
                 r = self.pieces[self.active_p].moveDown(20)
             else:
+                blocks = self.pieces[self.active_p].get_blocks()
+                for b in blocks:
+                    self.extra_blocks.append(b)
+                    print(b)
                 self.create_piece()
-                
-                
-    def into_board(self):   
-        
-        if self.pieces[self.active_p].is_stop():
-            
-                pass
-            
+                        
                 
                 
                 

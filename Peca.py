@@ -8,11 +8,11 @@ Created on Sun Aug 23 21:42:04 2020
 import pygame
 import numpy as np
 from pygame.math import Vector2
-
+from dibuixos_peces import get_piece_pos
 
 block_side = 20
 
-block_border_side = 16
+block_border_side = 15
 
 
         
@@ -25,12 +25,13 @@ class piece:
     #   -El centre de rotacio en Y
     #   -L'angle inicial
     #   -Colorsito(RGB)
-    def __init__(self,typ,rotX,rotY,initangle,color,limit_z,lim_x_min,lim_x_max):
+    def __init__(self,typ,rotX,rotY,initangle,color,limit_z,lim_x_min,lim_x_max,extra_blocks):
         
         #Res interessant son tot assignacions
         self.color =color
         self.type = typ
         p1 = [0,0]
+        self.extra_blocks = extra_blocks
         self.blocks = np.array([p1,p1,p1,p1])
         self.rot_center_X = rotX
         self.rot_center_Y = rotY
@@ -61,317 +62,11 @@ class piece:
         #Assignem centre per no escriure tant :P
         center_x = self.rot_center_X
         center_y = self.rot_center_Y
+        self.blocks = get_piece_pos(self.type,center_x,center_y,self.angle)
         
-        
-        
-        if self.type == 'example':
-            #Un sol block centrat al centre i de color color
-            self.blocks[0].x = center_x-block_side/2
-            self.blocks[0].y = center_y-block_side/2
-            
-            
-        elif self.type =='sq':
-            #Als quadrats no els hi importa una merda si els rotes per tant tot va bé fins aqui
-            #Pots aagafar com a centre (0,0) i fer els calculs per veure quin block es quin
-            #Declaracio block:: block(posX,posY,color)
-            self.blocks[0][0] = center_x-block_side
-            self.blocks[0][1] = center_y
-            
-            self.blocks[1][0] = center_x
-            self.blocks[1][1] = center_y
-            
-            self.blocks[2][0] = center_x
-            self.blocks[2][1] = center_y-block_side
-            
-            self.blocks[3][0] = center_x-block_side
-            self.blocks[3][1] = center_y-block_side
-        
-            
-        elif self.type == 'li':
-           
-            if self.angle>= 0 and self.angle < 90 :
-                
-                self.blocks[0][0] = center_x-block_side*2
-                self.blocks[0][1] = center_y-block_side
-                
-                self.blocks[1][0] = center_x-block_side
-                self.blocks[1][1] = center_y-block_side
-                
-                self.blocks[2][0] = center_x
-                self.blocks[2][1] = center_y-block_side
-                
-                self.blocks[3][0] = center_x+block_side
-                self.blocks[3][1] = center_y-block_side
-                    
-            elif self.angle>=90 and self.angle<180:
-                
-                self.blocks[0][0] = center_x-block_side
-                self.blocks[0][1] = center_y-block_side*2
-                
-                self.blocks[1][0] = center_x-block_side
-                self.blocks[1][1] = center_y-block_side
-                
-                self.blocks[2][0] = center_x-block_side
-                self.blocks[2][1] = center_y
-                
-                self.blocks[3][0] = center_x-block_side
-                self.blocks[3][1] = center_y+block_side
-                
-            elif self.angle>=180 and self.angle<270:
-                
-                self.blocks[0][0] = center_x-block_side*2
-                self.blocks[0][1] = center_y
-                
-                self.blocks[1][0] = center_x-block_side
-                self.blocks[1][1] = center_y
-                
-                self.blocks[2][0] = center_x
-                self.blocks[2][1] = center_y
-                
-                self.blocks[3][0] = center_x+block_side
-                self.blocks[3][1] = center_y
-                  
-            else:    
-                self.blocks[0][0] = center_x
-                self.blocks[0][1] = center_y-block_side*2
-                
-                self.blocks[1][0] = center_x
-                self.blocks[1][1] = center_y-block_side
-                
-                self.blocks[2][0] = center_x
-                self.blocks[2][1] = center_y
-                
-                self.blocks[3][0] = center_x
-                self.blocks[3][1] = center_y+block_side
-            
-        elif self.type == 'T':
-            
-            if self.angle>= 0 and self.angle < 90 :
-                self.blocks[0,0] = center_x-block_side/2
-                self.blocks[0,1] = center_y-block_side/2
-                
-                self.blocks[1,0] = center_x-block_side*1.5
-                self.blocks[1,1] = center_y-block_side/2
-                
-                self.blocks[2,0] = center_x+block_side/2
-                self.blocks[2,1] = center_y-block_side/2
-                
-                self.blocks[3,0] = center_x-block_side/2
-                self.blocks[3,1] = center_y-block_side*1.5
-                
-                
-            elif self.angle>=90 and self.angle<180:
-                self.blocks[0][0] = center_x-block_side/2
-                self.blocks[0][1] = center_y-block_side/2
-                
-                self.blocks[1][0] = center_x+block_side/2
-                self.blocks[1][1] = center_y-block_side/2
-                
-                self.blocks[2][0] = center_x-block_side/2
-                self.blocks[2][1] = center_y-block_side*1.5
-                
-                self.blocks[3][0] = center_x-block_side/2
-                self.blocks[3][1] = center_y+block_side/2
-                
-            elif self.angle>=180 and self.angle<270:
-                
-                self.blocks[0][0] = center_x-block_side/2
-                self.blocks[0][1] = center_y-block_side/2
-                
-                self.blocks[1][0] = center_x-block_side*1.5
-                self.blocks[1][1] = center_y-block_side/2
-                
-                self.blocks[2][0] = center_x-block_side/2
-                self.blocks[2][1] = center_y+block_side/2
-                
-                self.blocks[3][0] = center_x+block_side/2
-                self.blocks[3][1] = center_y-block_side/2
-                
-            else:    
-                
-                self.blocks[0][0] = center_x-block_side/2
-                self.blocks[0][1] = center_y-block_side/2
-                
-                self.blocks[1][0] = center_x-block_side*1.5
-                self.blocks[1][1] = center_y-block_side/2
-                
-                self.blocks[2][0] = center_x-block_side/2
-                self.blocks[2][1] = center_y-block_side*1.5
-                
-                self.blocks[3][0] = center_x-block_side/2
-                self.blocks[3][1] = center_y+block_side/2
-               
-            
-        elif self.type == 'J':
-            
-            if self.angle>= 0 and self.angle < 90 :
-                self.blocks[0][0] = center_x-block_side/2
-                self.blocks[0][1] = center_y-block_side/2
-                
-                self.blocks[1][0] = center_x-block_side*1.5
-                self.blocks[1][1] = center_y-block_side/2
-                
-                self.blocks[2][0] = center_x+block_side/2
-                self.blocks[2][1] = center_y-block_side/2
-                
-                self.blocks[3][0] = center_x+block_side/2
-                self.blocks[3][1] = center_y+block_side/2
-                
-            elif self.angle>=90 and self.angle<180 : 
-                
-                self.blocks[0][0] = center_x-block_side/2
-                self.blocks[0][1] = center_y-block_side/2
-                
-                self.blocks[1][0] = center_x-block_side/2
-                self.blocks[1][1] = center_y-block_side*1.5
-                
-                self.blocks[2][0] = center_x-block_side/2
-                self.blocks[2][1] = center_y+block_side/2
-                
-                self.blocks[3][0] = center_x-block_side*1.5
-                self.blocks[3][1] = center_y+block_side/2
-                
-            elif self.angle>=180 and self.angle<270 :   
-                self.blocks[0][0] = center_x-block_side/2
-                self.blocks[0][1] = center_y-block_side/2
-                
-                self.blocks[1][0] = center_x-block_side*1.5
-                self.blocks[1][1] = center_y-block_side/2
-                
-                self.blocks[2][0] = center_x+block_side/2
-                self.blocks[2][1] = center_y-block_side/2
-                
-                self.blocks[3][0] = center_x-block_side*1.5
-                self.blocks[3][1] = center_y-block_side*1.5
-                
-            else :     
-                self.blocks[0][0] = center_x-block_side/2
-                self.blocks[0][1] = center_y-block_side/2
-                
-                self.blocks[1][0] = center_x-block_side/2
-                self.blocks[1][1] = center_y-block_side*1.5
-                
-                self.blocks[2][0] = center_x-block_side/2
-                self.blocks[2][1] = center_y+block_side/2
-                
-                self.blocks[3][0] = center_x+block_side/2
-                self.blocks[3][1] = center_y-block_side*1.5               
-                
-                
-        elif self.type == 'L':
-            
-            if self.angle>= 0 and self.angle < 90 :
-                self.blocks[0][0] = center_x-block_side/2
-                self.blocks[0][1] = center_y-block_side/2
-                
-                self.blocks[1][0] = center_x-block_side*1.5
-                self.blocks[1][1] = center_y-block_side/2
-                
-                self.blocks[2][0] = center_x+block_side/2
-                self.blocks[2][1] = center_y-block_side/2
-                
-                self.blocks[3][0] = center_x-block_side*1.5
-                self.blocks[3][1] = center_y+block_side/2
-                
-            elif self.angle>=90 and self.angle<180 : 
-                self.blocks[0][0] = center_x-block_side/2
-                self.blocks[0][1] = center_y-block_side/2
-                
-                self.blocks[1][0] = center_x-block_side/2
-                self.blocks[1][1] = center_y-block_side*1.5
-                
-                self.blocks[2][0] = center_x-block_side/2
-                self.blocks[2][1] = center_y+block_side/2
-                
-                self.blocks[3][0] = center_x-block_side*1.5
-                self.blocks[3][1] = center_y-block_side*1.5
-                
-            elif self.angle>=180 and self.angle<270 :   
-                self.blocks[0][0] = center_x-block_side/2
-                self.blocks[0][1] = center_y-block_side/2
-                
-                self.blocks[1][0] = center_x-block_side*1.5
-                self.blocks[1][1] = center_y-block_side/2
-                
-                self.blocks[2][0] = center_x+block_side/2
-                self.blocks[2][1] = center_y-block_side/2
-                
-                self.blocks[3][0] = center_x+block_side/2
-                self.blocks[3][1] = center_y-block_side*1.5
-                    
-            else :     
-                self.blocks[0][0] = center_x-block_side/2
-                self.blocks[0][1] = center_y-block_side/2
-                
-                self.blocks[1][0] = center_x-block_side/2
-                self.blocks[1][1] = center_y-block_side*1.5
-                
-                self.blocks[2][0] = center_x-block_side/2
-                self.blocks[2][1] = center_y+block_side/2
-                
-                self.blocks[3][0] = center_x+block_side/2
-                self.blocks[3][1] = center_y+block_side/2
-                
-                
-        elif self.type == 'S':
-            
-            if self.angle>=0 and self.angle<90 or self.angle>=180 and self.angle<270:
-                self.blocks[0][0] = center_x-block_side/2
-                self.blocks[0][1] = center_y-block_side/2
-                
-                self.blocks[1][0] = center_x+block_side/2
-                self.blocks[1][1] = center_y-block_side/2
-                
-                self.blocks[2][0] = center_x-block_side/2
-                self.blocks[2][1] = center_y+block_side/2
-                
-                self.blocks[3][0] = center_x-block_side*1.5
-                self.blocks[3][1] = center_y+block_side/2
-                
-            else:
-                self.blocks[0][0] = center_x-block_side/2
-                self.blocks[0][1] = center_y-block_side/2
-                
-                self.blocks[1][0] = center_x+block_side/2
-                self.blocks[1][1] = center_y-block_side/2
-                
-                self.blocks[2][0] = center_x-block_side/2
-                self.blocks[2][1] = center_y-block_side*1.5
-                
-                self.blocks[3][0] = center_x+block_side/2
-                self.blocks[3][1] = center_y+block_side/2
-        
-        
-        elif self.type == 'Z':
-            
-            if self.angle>=0 and self.angle<90 or self.angle>=180 and self.angle<270:
-                self.blocks[0][0] = center_x-block_side/2
-                self.blocks[0][1] = center_y-block_side/2
-                
-                self.blocks[1][0] = center_x+block_side/2
-                self.blocks[1][1] = center_y+block_side/2
-                
-                self.blocks[2][0] = center_x-block_side/2
-                self.blocks[2][1] = center_y+block_side/2
-                
-                self.blocks[3][0] = center_x-block_side*1.5
-                self.blocks[3][1] = center_y-block_side/2
-                
-            else:
-                self.blocks[0][0] = center_x-block_side/2
-                self.blocks[0][1] = center_y-block_side/2
-                
-                self.blocks[1][0] = center_x-block_side/2
-                self.blocks[1][1] = center_y+block_side/2
-                
-                self.blocks[2][0] = center_x+block_side/2
-                self.blocks[2][1] = center_y-block_side/2
-                
-                self.blocks[3][0] = center_x+block_side/2
-                self.blocks[3][1] = center_y-block_side*1.5
-                
-                
-         
+    def get_blocks(self):
+        return self.blocks
+    
     def is_side(self,side):
         i = 0
         is_ok = True
@@ -434,20 +129,19 @@ class piece:
     def rot(self):
         last_angle = self.angle
         r = False
-        
-        if not self.stop:
-            
-            if not self.stop_rot:
-                
-                self.angle = self.angle+90
-                if self.angle ==360:
-                    self.angle = 0
+        self.angle = self.angle+90
+        if self.angle ==360:
+            self.angle = 0
+        self.update_sprite()
+       
+        if self.is_side('l') or self.is_side('r') or self.is_bottom() or self.stop:
+                self.angle = last_angle
                 self.update_sprite()
-                
-                if self.is_side('l') or self.is_side('r') or self.is_bottom():
-                    self.angle = last_angle
-                    self.update_sprite()
-                    self.stop_rot =True
+                self.stop_rot =True
+        else:
+            if self.stop_rot:
+                self.stop_rot = False
+            r = True
         return r
                 
         
@@ -460,16 +154,25 @@ class piece:
     
     def is_bottom(self):
         i = 0
-        stop = False
-        while not stop and i < len(self.blocks):
+        j = 0
+        self.stop = False
+        while not self.stop and i < len(self.blocks):
             b = self.blocks[i]
-            
-            if (b[1]+block_side)>=self.lim_z:
-                stop = True
+            if (b[1]+block_side)<self.lim_z:
+                
+                while not self.stop and j < len(self.extra_blocks):
+                    
+                    s = self.extra_blocks[j]
+                    
+                    if b[0]==s[0] and (b[1]+block_side)>=s[1]:
+                        self.stop = True
+                    else:
+                        self.stop = False
+                    j = j+1
             else:
-                stop = False
+                self.stop = True
             i = i+1
-        return stop
+        return self.stop
             
         
     #Cosa mes simple no hi ha, crida al draw dels blocks
@@ -480,10 +183,10 @@ class piece:
             x = b[0]
             y = b[1]
             r1 = pygame.Rect(x,y,block_side,block_side)
-            r2 = pygame.Rect(x+1,y+1,block_border_side,block_border_side)
+            r2 = pygame.Rect(x+2,y+2,block_border_side,block_border_side)
             pygame.draw.rect(surf,self.color,r1)
             #Borde Negre de tamany 2
-            pygame.draw.rect(surf,(0,0,0),r2,2)
+            pygame.draw.rect(surf,(0,0,0),r2,3)
     
             
             

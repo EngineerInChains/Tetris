@@ -20,7 +20,7 @@ pygame.init()
 
 HEIGHT = 800
 SENSE_HEIGHT = 780
-WIDTH = 600
+WIDTH = 360
 
 
 b = board.board(WIDTH,HEIGHT,'Tetris')
