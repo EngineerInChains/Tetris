@@ -18,8 +18,8 @@ import random
 #Funcio que em demanen que posi(la llibreria)
 pygame.init()
 
-HEIGHT = 800
-SENSE_HEIGHT = 780
+HEIGHT = 600
+SENSE_HEIGHT = 580
 WIDTH = 360
 
 
@@ -57,7 +57,10 @@ while True:
     
     pygame.display.update()
     #Sleep perque no es torni locatis
-    time.sleep(0.3)
+    if b.get_score() != 0:
+        time.sleep(0.3-b.get_score()*0.0001)
+    else:
+        time.sleep(0.3)
    
     
 

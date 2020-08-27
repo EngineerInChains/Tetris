@@ -30,7 +30,8 @@ class piece:
         #Res interessant son tot assignacions
         self.color =color
         self.type = typ
-        p1 = [0,0]
+        self.d = {"sq":0,'li':1,'T':2,'S':3,'Z':4,'L':5,'J':6}
+        p1 = [0,0,self.d[typ]]
         self.extra_blocks = extra_blocks
         self.blocks = np.array([p1,p1,p1,p1])
         self.rot_center_X = rotX
@@ -42,6 +43,7 @@ class piece:
         self.stop_rot = False
         self.stop = False
         self.update_sprite()
+        self.lost = False
         
         
     #Forçar el centre de rotació de la peça on tu vulguis(moure la peça vamos)   
@@ -62,7 +64,7 @@ class piece:
         #Assignem centre per no escriure tant :P
         center_x = self.rot_center_X
         center_y = self.rot_center_Y
-        self.blocks = get_piece_pos(self.type,center_x,center_y,self.angle)
+        self.blocks = get_piece_pos(self.d[self.type],center_x,center_y,self.angle)
         
     def get_blocks(self):
         return self.blocks
@@ -148,6 +150,8 @@ class piece:
     
     def is_stop(self):
         return self.stop
+    def is_lost(self):
+        return self.lost
     #Comprovo si algun dels blocks ha arribat al limit que es passa per parametre
     #Esquema de bucle de cerca caca avorrida.
     #Actualitza la variable stop per a saber despres si ta parao
@@ -165,6 +169,8 @@ class piece:
                     s = self.extra_blocks[j]
                     
                     if b[0]==s[0] and b[1]==s[1]:
+                        if b[1]==20:
+                            self.lost=True
                         self.stop = True
                     
                     j = j+1
