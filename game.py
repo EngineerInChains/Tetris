@@ -18,49 +18,70 @@ import random
 #Funcio que em demanen que posi(la llibreria)
 pygame.init()
 
+#Constants joc
 HEIGHT = 600
 SENSE_HEIGHT = 580
 WIDTH = 360
 
-
+#Crecio Board
 b = board.board(WIDTH,HEIGHT,'Tetris')
-
+#Primera Peça
 b.create_piece()
 
 
-#b.rotRight()zz
+
 
 #Bucle Principal del Joc(Aixo va tot el rato i d'aqui se surt a fer cusas)
 while True:
     
-    #Bucle per comprovar si la llibreria ha detectat 
-    # algun event(Aqui agafarem el fet que apretis una tecla, de moment nomes quit)
+    #Bucle per comprovar si la llibreria ha detectat algun event
     for event in pygame.event.get():
+        
+        #Tecles
         if event.type == KEYDOWN:
+            
+            #Left
             if event.key == K_LEFT:
                 b.move_active('l')
+            
+            #Right
             elif event.key == K_RIGHT:
                 b.move_active('r')
+            
+            #Down
             elif event.key == K_DOWN:
                 b.move_active('d')
+            
+            #Space
             elif event.key== K_SPACE:
                 b.move_active('dd')
+            
+            #R
             elif event.key == K_r:
-                b.rotate_active() 
+                b.rotate_active()
+                
         if event.type == QUIT:
             pygame.quit()
             exit()
+            
+    #Update Board(move down)
     b.update_board()
+    
+    #Draw Board
     b.draw_board()
     
-    
-    
+    #Update Display
     pygame.display.update()
+    
+    #Difficulty setting
+    diff = 0.0002
+    delay = 0.3
     #Sleep perque no es torni locatis
     if b.get_score() != 0:
-        time.sleep(0.3-b.get_score()*0.0001)
+        score = b.get_score()**2
+        time.sleep(delay-b.get_score()*diff)
     else:
-        time.sleep(0.3)
+        time.sleep(delay)
    
     
 
