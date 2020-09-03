@@ -26,22 +26,22 @@ SENSE_HEIGHT = 580
 WIDTH = 360
 
 
-lr = 0.1
-discount = 0.8
-episodes = 10000
+lr = 0.08
+discount = 0.9
+episodes = 50000
 
 
-q_table = np.random.uniform(0,200,size=(65535,5))
-
-
-
+q_table = np.random.uniform(0,100,size=(65535,5))
 
 
 
-min_global_y = 580
+
+
+
+
 block_side = 20
 def get_state(pos_x_peça,pos_y_peça,blocks,extra_blocks,angle_peça,tipus_peça):
-    
+    min_global_y = 560
     state = 0
     i = 0
     is_below = False
@@ -120,6 +120,7 @@ def get_state(pos_x_peça,pos_y_peça,blocks,extra_blocks,angle_peça,tipus_peç
         state = 2**(15)
     if is_hole:
         state = state + 2**(14)
+    pos_y_peça = min_global_y
     if pos_y_peça < block_side:
         pos_y_peça = 0
     pos_y = format(int(pos_y_peça/block_side),'05b')
@@ -142,25 +143,30 @@ def get_state(pos_x_peça,pos_y_peça,blocks,extra_blocks,angle_peça,tipus_peç
     
     state = state + 2**(2)*int(t[0])+ 2**(1)*int(t[1])+ 2**(0)*int(t[2])
         
-    return state,n_h
+    return state,n_h,min_global_y
 max_score = 0
 max_length = 0
+max_n_pieces = 0
+max_n_holes = 0
 start = time.time()
 
 for ep in range(episodes):
+    last_score= 0
+    
     show = False
     #Crecio Board
-    b = board.board(WIDTH,HEIGHT,'Tetris')
+    b = board.board(WIDTH,HEIGHT,'Tetris',ep%500!=0)
     #Primera Peça
     b.create_piece()
     reward = 0
     piece_pos = b.get_piece_pos()
     blocks = b.get_piece_blocks()
-    init_state,n_h = get_state(piece_pos[0],piece_pos[1],blocks,b.get_extra_blocks(),b.get_piece_angle(),b.get_piece_type())
+    init_state,n_h,min_global_y = get_state(piece_pos[0],piece_pos[1],blocks,b.get_extra_blocks(),b.get_piece_angle(),b.get_piece_type())
     #Bucle Principal del Joc(Aixo va tot el rato i d'aqui se surt a fer cusas)
-    if ep %50==0:
+    if ep %500==0:
         pylab.figure()
-        ax = sns.heatmap(q_table)
+        ax = sns.heatmap(q_table,vmin=0,vmax=300)
+        pylab.title(str(ep))
         pylab.show()
         pylab.close()
     if ep%50==0:
@@ -226,7 +232,7 @@ for ep in range(episodes):
         delay = 0.1
         #Sleep perque no es torni locatis
         
-        if ep%40==0:
+        if ep%500==0:
             if b.get_score() != 0:
                 score = b.get_score()**2
                 time.sleep(delay-b.get_score()*diff)
@@ -237,13 +243,10 @@ for ep in range(episodes):
         b.update_board()
         
         #Draw Board
-        if ep %40==0:
+        if ep %500==0:
             b.draw_board()
-        
-        
-        
-        #Update Display
-        pygame.display.update()
+            #Update Display
+            pygame.display.update()
         
         
         if not b.is_lost():
@@ -251,35 +254,45 @@ for ep in range(episodes):
             piece_pos = b.get_piece_pos()
             blocks = b.get_piece_blocks()
             
-            new_state,n_h = get_state(piece_pos[0],piece_pos[1],blocks,b.get_extra_blocks(),b.get_piece_angle(),b.get_piece_type())
+            new_state,n_h,min_global_y = get_state(piece_pos[0],piece_pos[1],blocks,b.get_extra_blocks(),b.get_piece_angle(),b.get_piece_type())
             if ant_type != b.get_piece_type():
                 ant_type = b.get_piece_type()
                 n_pieces = n_pieces+1
-            reward = b.get_score()*10
-            if n_h == 0:
-                reward = reward +5
+                
             
-            reward = reward + min_global_y/100
+            reward = 100*(b.get_score()-last_score)
+            if n_h == 0:
+                reward = reward +10
+            else:
+                reward = reward-n_h*0.8
+            if n_h>max_n_holes:
+                max_n_holes = n_h
+            reward = reward + (min_global_y/50)
             max_future_q = np.max(q_table[new_state])
             current_q = q_table[new_state][action]
             new_q = (1-lr) * current_q + lr*(reward+discount*max_future_q)
             q_table[init_state][action] = new_q
         else:
-            q_table[init_state][action] = q_table[init_state][action]+b.get_score()-q_table[init_state][action]*(1/n_pieces)
+            q_table[init_state][action] = q_table[init_state][action]-q_table[init_state][action]*(1/(n_pieces+10))
             
         init_state = new_state
-    if ep%40==0:
-        if b.is_lost():
-            diff = time.time()-game_start
-            print("GAME LENGTH:" +str(diff))
-            if diff > max_length:
-                max_length = diff
-            print("MAX GAME LENGTH:" +str(max_length))
-            print("TOTAL TIME: "+str(time.time()-start))
-            print("CURRENT SCORE: "+str(b.get_score()))
-            if b.get_score() > max_score:
-                max_score=b.get_score()
-            print("MAX SCORE: "+str(max_score)+"\n")
+    if ep%500==0:
+        diff = time.time()-game_start
+        print("GAME LENGTH:" +str(diff))
+        if diff > max_length:
+            max_length = diff
+        print("MAX GAME LENGTH:" +str(max_length))
+        print("TOTAL TIME: "+str(time.time()-start))
+        print("CURRENT SCORE: "+str(b.get_score()))
+    if n_pieces > max_n_pieces:
+        max_n_pieces = n_pieces
+            
+    if b.get_score() > max_score:
+        max_score=b.get_score()
+    if ep%50==0:
+        print("MAX SCORE: "+str(max_score))
+        print("MAX N HOLES: "+str(max_n_holes))
+        print("MAX Pieces Put: "+str(max_n_pieces)+"\n")
         
             
             

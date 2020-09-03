@@ -12,18 +12,18 @@ from Peca import *
 
 
 class board():
-    def __init__(self,sizeX,sizeY,caption):
+    def __init__(self,sizeX,sizeY,caption,silent):
         
         
         self.sizeX = sizeX
         self.sizeY = sizeY
-        
-        #Creacio superficie on es pinta (anchura i altura) 
-        self.displaysurface = pygame.display.set_mode((sizeX, sizeY))
-        
-        
-        #Titol de la pantalla
-        pygame.display.set_caption(caption)
+        if not silent:
+            #Creacio superficie on es pinta (anchura i altura) 
+            self.displaysurface = pygame.display.set_mode((sizeX, sizeY))
+            
+            
+            #Titol de la pantalla
+            pygame.display.set_caption(caption)
         
         
         self.lim_z = sizeY
