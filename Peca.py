@@ -51,6 +51,10 @@ class piece:
         
     def get_blocks(self):
         return self.blocks
+    def get_angle(self):
+        return self.angle
+    def get_center(self):
+        return [self.rot_center_X,self.rot_center_Y]
     
     
     def moveside(self,side,desp):

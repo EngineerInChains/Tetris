@@ -31,10 +31,8 @@ class board():
         self.lim_x_min = 0
         self.lim_x_max = sizeX-20*8
         
-        self.pieces = []
-        
         self.score = 0
-        self.active_p = -1
+        self.active_p = ""
         
         self.font = pygame.font.SysFont(None, 24)
         self.stop_active = False
@@ -60,7 +58,6 @@ class board():
         while self.next_p == typ:
             self.next_p = random.choice(self.types)
         #typ='sq'
-        
         if typ == 'sq' or typ == 'li' :
             posX = 140
             posY = 20
@@ -73,45 +70,58 @@ class board():
         color = self.colors[d[typ]]
         
         self.next_p_draw = piece(self.next_p,self.next_piece_pos[self.next_p][0],self.next_piece_pos[self.next_p][1],angle,self.colors[d[self.next_p]],self.lim_z,self.lim_x_min,self.lim_x_max)
-        self.pieces.append(piece(typ,posX,posY,angle,color,self.lim_z,self.lim_x_min,self.lim_x_max))
-        self.active_p = self.active_p + 1
+        self.active_p = piece(typ,posX,posY,angle,color,self.lim_z,self.lim_x_min,self.lim_x_max)
         
     def rotate_active(self):
-        
-        self.pieces[self.active_p].rot(False)
-        if self.touch_side('l') or self.touch_side('r') or self.touch_piece() or self.touch_down():
-            self.pieces[self.active_p].rot(True)
+        if not self.stop_active:
+            self.active_p.rot(False)
+            if self.touch_side('l') or self.touch_side('r') or self.touch_piece() or self.touch_down():
+                self.active_p.rot(True)
             
     
     def move_active(self,side):
-        if side=='l':
-            self.pieces[self.active_p].moveside(side,20)
-            if self.touch_side(side) or self.touch_piece():
-                self.pieces[self.active_p].moveside('r',20)
-                
-        elif side=='r':
-            self.pieces[self.active_p].moveside(side,20)
-            if self.touch_side(side) or self.touch_piece():
-                self.pieces[self.active_p].moveside('l',20)
-                
-        elif side == 'd':
-            self.pieces[self.active_p].moveDown(20)
-            down = self.touch_down()
-            if down or self.touch_piece():
-                
-                self.pieces[self.active_p].moveUp(20)
-                self.stop_active = True
-                
-        elif side=='dd':
-            if not self.stop_active_space:
-                self.pieces[self.active_p].moveDown(40)
+        if not self.stop_active:
+            if side=='l':
+                self.active_p.moveside(side,20)
+                if self.touch_side(side) or self.touch_piece():
+                    self.active_p.moveside('r',20)
+                    
+            elif side=='r':
+                self.active_p.moveside(side,20)
+                if self.touch_side(side) or self.touch_piece():
+                    self.active_p.moveside('l',20)
+                    
+            elif side == 'd':
+                self.active_p.moveDown(20)
                 down = self.touch_down()
                 if down or self.touch_piece():
                     
-                    self.pieces[self.active_p].moveUp(40)
-                    if down:
-                        self.stop_active_space = True
+                    self.active_p.moveUp(20)
+                    self.stop_active = True
+                    
+            elif side=='dd':
+                if not self.stop_active_space:
+                    self.active_p.moveDown(40)
+                    down = self.touch_down()
+                    if down or self.touch_piece():
+                        
+                        self.active_p.moveUp(40)
+                        if down:
+                            self.stop_active_space = True
+                   
+    def get_piece_type(self):
+        d = {"sq":0,'li':1,'T':2,'S':3,'Z':4,'L':5,'J':6}
+        return d[self.active_p.type]
+                        
+    def get_piece_pos(self):
+        return self.active_p.get_center()
+    def get_extra_blocks(self):
+        return self.extra_blocks
+    def get_piece_angle(self):
+        return self.active_p.get_angle()
             
+    def get_piece_blocks(self):
+        return self.active_p.get_blocks()
         
     def get_score(self):
         return self.score
@@ -126,7 +136,7 @@ class board():
             else:
                 lines,b = self.is_line(self.sizeY)
                 
-                blocks = self.pieces[self.active_p].get_blocks()
+                blocks = self.active_p.get_blocks()
                 
                 if b:
                     for line in lines:
@@ -137,7 +147,7 @@ class board():
                         aux_extra = self.extra_blocks[:,1]<= line
                         blocks[aux_blocks,1]= blocks[aux_blocks,1]+20
                         self.extra_blocks[aux_extra,1] = self.extra_blocks[aux_extra,1]+20
-                        
+                
                 self.extra_blocks = np.vstack((self.extra_blocks,blocks))
                 self.create_piece()
     
@@ -145,8 +155,8 @@ class board():
     #Esquema de bucle de cerca caca avorrida.
     #Actualitza la variable stop per a saber despres si ta parao
     def is_lost(self):
-        if self.active_p >0 and len(self.extra_blocks) >1:
-            b = self.pieces[self.active_p].get_blocks()
+        if self.active_p != "" and len(self.extra_blocks) >1:
+            b = self.active_p.get_blocks()
             aux = np.any(b[:,1]<20)
             aux2 = self.touch_piece()
             return aux and aux2
@@ -156,14 +166,14 @@ class board():
         i = 0
         
         
-        blocks = self.pieces[self.active_p].get_blocks()
+        blocks = self.active_p.get_blocks()
         
         b = np.any((blocks[:,1]+block_side)>=self.lim_z)
         return b
              
     
     def touch_piece(self):
-        blocks = self.pieces[self.active_p].get_blocks()
+        blocks = self.active_p.get_blocks()
         touch = False
         i = 0
         while not touch and i < len(blocks):
@@ -180,7 +190,7 @@ class board():
     def is_line(self,height):
         lines = []
         b = False
-        blocks = self.pieces[self.active_p].get_blocks()
+        blocks = self.active_p.get_blocks()
         if len(self.extra_blocks)>0:
             for line in range(0,height,block_side):
                 b1_line = blocks[blocks[:,1]==line]
@@ -193,7 +203,7 @@ class board():
     
     def touch_side(self,side):
         
-        blocks = self.pieces[self.active_p].get_blocks()
+        blocks = self.active_p.get_blocks()
         if side == 'l':
             is_bad = np.any(blocks[:,0]<=self.lim_x_min)
         else:
@@ -234,7 +244,7 @@ class board():
                 #Borde Negre de tamany 2
                 pygame.draw.rect(self.displaysurface,(0,0,0),r2,3)
             
-            self.pieces[self.active_p].draw(self.displaysurface)
+            self.active_p.draw(self.displaysurface)
         else:
             img = self.font.render("YOU LOST", True, (255,255,255))
             self.displaysurface.blit(img, (self.sizeX/2,self.sizeY/2))
