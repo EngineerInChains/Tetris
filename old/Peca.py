@@ -45,7 +45,7 @@ class piece:
         self.lim_x_max = lim_x_max
         
         
-        self.blocks = get_piece_pos(self.d[self.type],self.rot_center_X,self.rot_center_Y,self.angle)
+        self.blocks = get_piece_pos(self.type,self.rot_center_X,self.rot_center_Y,self.angle)
             
 
         
@@ -98,12 +98,12 @@ class piece:
             if self.angle ==360:
                 self.angle = 0
                 
-            self.blocks = get_piece_pos(self.d[self.type],self.rot_center_X,self.rot_center_Y,self.angle)
+            self.blocks = get_piece_pos(self.type,self.rot_center_X,self.rot_center_Y,self.angle)
         else:
             if self.angle == 0:
                 self.angle = 360 
             self.angle = self.angle-90
-            self.blocks = get_piece_pos(self.d[self.type],self.rot_center_X,self.rot_center_Y,self.angle)
+            self.blocks = get_piece_pos(self.type,self.rot_center_X,self.rot_center_Y,self.angle)
        
                 
                 
